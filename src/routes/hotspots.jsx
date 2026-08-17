@@ -1,6 +1,5 @@
 import { Suspense, lazy, useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { ClientOnly } from "@tanstack/react-router";
+import { ClientOnly, createFileRoute } from "@tanstack/react-router";
 import { MapPinned, Flame, Layers, Building2 } from "lucide-react";
 import { PageHeader } from "@/components/AppShell";
 import { KpiCard } from "@/components/KpiCard";
