@@ -5,7 +5,7 @@ const requestSchema = new mongoose.Schema(
     citizenName: {
       type: String,
       trim: true,
-      default: "Anonymous",
+      default: "Anonymous Citizen",
     },
 
     requestText: {
@@ -15,16 +15,21 @@ const requestSchema = new mongoose.Schema(
       maxlength: 1200,
     },
 
+    language: {
+      type: String,
+      default: "en",
+    },
+
     category: {
       type: String,
       enum: [
         "Water",
-        "Roads",
+        "Road",
         "Healthcare",
+        "Agriculture",
         "Education",
         "Electricity",
         "Sanitation",
-        "Agriculture",
         "Other",
       ],
       default: "Other",
@@ -32,8 +37,18 @@ const requestSchema = new mongoose.Schema(
 
     priority: {
       type: String,
-      enum: ["Low", "Medium", "High", "Critical"],
+      enum: [
+        "Low",
+        "Medium",
+        "High",
+        "Critical",
+      ],
       default: "Medium",
+    },
+
+    status: {
+      type: String,
+      default: "Received",
     },
 
     country: {
@@ -54,7 +69,14 @@ const requestSchema = new mongoose.Schema(
 
     source: {
       type: String,
-      enum: ["Web", "Mobile", "Voice", "WhatsApp"],
+      enum: [
+        "Text",
+        "Voice",
+        "Messaging",
+        "Web",
+        "Mobile",
+        "WhatsApp",
+      ],
       default: "Web",
     },
 

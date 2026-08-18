@@ -1,15 +1,11 @@
 const express = require("express");
 
 const {
-  createRequest,
-  getRequests,
+  getHotspots,
 } = require("../controllers/requestController");
 
 const router = express.Router();
 
-router
-  .route("/")
-  .get(getRequests)
-  .post(createRequest);
+router.get("/", getHotspots);
 
 module.exports = router;

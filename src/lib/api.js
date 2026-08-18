@@ -1,8 +1,7 @@
 import axios from "axios";
 
-// Backend is not connected yet.
-// Keep this empty until we create/deploy a backend specifically for Project 2.
-export const API_BASE_URL = "";
+export const API_BASE_URL =
+  "http://localhost:5000/api";
 
 export const API_ERROR_MESSAGE =
   "Unable to connect to the CivilIntel API.";
@@ -15,27 +14,83 @@ export const api = axios.create({
   },
 });
 
-// API helpers
-export async function getRequests() {
-  throw new Error("Backend not connected yet");
+// Get citizen requests
+export async function getRequests({ country } = {}) {
+  try {
+    const response = await api.get("/requests", {
+      params: country ? { country } : {},
+    });
+
+    return response.data.data || [];
+  } catch (error) {
+    throw new Error(
+      error?.response?.data?.message ||
+        API_ERROR_MESSAGE
+    );
+  }
 }
 
-export async function createRequest() {
-  throw new Error("Backend not connected yet");
+// Create citizen request
+export async function createRequest(payload) {
+  try {
+    const response = await api.post(
+      "/requests",
+      payload
+    );
+
+    return response.data.data;
+  } catch (error) {
+    throw new Error(
+      error?.response?.data?.message ||
+        API_ERROR_MESSAGE
+    );
+  }
 }
 
-export async function getHotspots() {
-  throw new Error("Backend not connected yet");
+// Get demand hotspots
+export async function getHotspots({ country } = {}) {
+  try {
+    const response = await api.get("/hotspots", {
+      params: country ? { country } : {},
+    });
+
+    return response.data.data || [];
+  } catch (error) {
+    throw new Error(
+      error?.response?.data?.message ||
+        API_ERROR_MESSAGE
+    );
+  }
 }
 
 export async function getRecommendations() {
-  throw new Error("Backend not connected yet");
+  try {
+    const response = await api.get(
+      "/recommendations"
+    );
+
+    return response.data.data ||
+      response.data ||
+      [];
+  } catch (error) {
+    throw new Error(
+      error?.response?.data?.message ||
+        API_ERROR_MESSAGE
+    );
+  }
 }
 
 export async function getDashboard() {
-  throw new Error("Backend not connected yet");
-}
+  try {
+    const response = await api.get("/dashboard");
 
-export async function getDpiImpact() {
-  throw new Error("Backend not connected yet");
+    return response.data.data ||
+      response.data ||
+      {};
+  } catch (error) {
+    throw new Error(
+      error?.response?.data?.message ||
+        API_ERROR_MESSAGE
+    );
+  }
 }
