@@ -19,7 +19,7 @@ export function KpiCard({ label, value, description, icon: Icon, tone = "primary
           {Icon && <Icon className="size-4.5" />}
         </span>
       </div>
-      <p className="mt-3 text-3xl font-bold tracking-tight tabular-nums">{value}</p>
+      <p className="mt-3 truncate text-2xl font-bold tracking-tight tabular-nums xl:text-3xl">{value}</p>
       <div className="mt-1.5 flex items-center gap-2">
         {trend && (
           <span
