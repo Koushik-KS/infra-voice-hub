@@ -7,6 +7,7 @@ import {
   Legend,
   Pie,
   PieChart,
+  PolarAngleAxis,
   RadialBar,
   RadialBarChart,
   ResponsiveContainer,
@@ -222,7 +223,7 @@ function RegionalPage() {
                     startAngle={220}
                     endAngle={-40}
                   >
-                    <YAxis type="number" domain={[0, 100]} tick={false} axisLine={false} />
+                    <PolarAngleAxis type="number" domain={[0, 100]} tick={false} axisLine={false} />
                     <RadialBar dataKey="value" cornerRadius={12} background={{ fill: "var(--muted)" }} />
                   </RadialBarChart>
                 </ResponsiveContainer>
