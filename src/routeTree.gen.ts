@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HotspotsRouteImport } from './routes/hotspots'
 import { Route as RecommendationsRouteImport } from './routes/recommendations'
+import { Route as RegionalRouteImport } from './routes/regional'
 import { Route as RequestsRouteImport } from './routes/requests'
 import { Route as SubmitRouteImport } from './routes/submit'
 
@@ -30,6 +31,11 @@ const RecommendationsRoute = RecommendationsRouteImport.update({
   path: '/recommendations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegionalRoute = RegionalRouteImport.update({
+  id: '/regional',
+  path: '/regional',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RequestsRoute = RequestsRouteImport.update({
   id: '/requests',
   path: '/requests',
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/hotspots': typeof HotspotsRoute
   '/recommendations': typeof RecommendationsRoute
+  '/regional': typeof RegionalRoute
   '/requests': typeof RequestsRoute
   '/submit': typeof SubmitRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/hotspots': typeof HotspotsRoute
   '/recommendations': typeof RecommendationsRoute
+  '/regional': typeof RegionalRoute
   '/requests': typeof RequestsRoute
   '/submit': typeof SubmitRoute
 }
@@ -60,19 +68,33 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/hotspots': typeof HotspotsRoute
   '/recommendations': typeof RecommendationsRoute
+  '/regional': typeof RegionalRoute
   '/requests': typeof RequestsRoute
   '/submit': typeof SubmitRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/hotspots' | '/recommendations' | '/requests' | '/submit'
+  fullPaths:
+    | '/'
+    | '/hotspots'
+    | '/recommendations'
+    | '/regional'
+    | '/requests'
+    | '/submit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/hotspots' | '/recommendations' | '/requests' | '/submit'
+  to:
+    | '/'
+    | '/hotspots'
+    | '/recommendations'
+    | '/regional'
+    | '/requests'
+    | '/submit'
   id:
     | '__root__'
     | '/'
     | '/hotspots'
     | '/recommendations'
+    | '/regional'
     | '/requests'
     | '/submit'
   fileRoutesById: FileRoutesById
@@ -81,6 +103,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HotspotsRoute: typeof HotspotsRoute
   RecommendationsRoute: typeof RecommendationsRoute
+  RegionalRoute: typeof RegionalRoute
   RequestsRoute: typeof RequestsRoute
   SubmitRoute: typeof SubmitRoute
 }
@@ -108,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RecommendationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/regional': {
+      id: '/regional'
+      path: '/regional'
+      fullPath: '/regional'
+      preLoaderRoute: typeof RegionalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/requests': {
       id: '/requests'
       path: '/requests'
@@ -129,6 +159,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HotspotsRoute: HotspotsRoute,
   RecommendationsRoute: RecommendationsRoute,
+  RegionalRoute: RegionalRoute,
   RequestsRoute: RequestsRoute,
   SubmitRoute: SubmitRoute,
 }
