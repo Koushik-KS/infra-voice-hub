@@ -11,6 +11,8 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+// @ts-expect-error - JavaScript component (project is JS-only per product spec)
+import { AppShell } from "../components/AppShell.jsx";
 
 function NotFoundComponent() {
   return (
