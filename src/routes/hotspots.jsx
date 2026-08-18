@@ -9,7 +9,7 @@ import { DemoNotice, LoadingState, Skeleton } from "@/components/ui/States";
 import { DEMO_HOTSPOTS } from "@/lib/demoData";
 import { getHotspots } from "@/lib/api";
 import { useApiResource } from "@/hooks/useApiResource";
-import { hotspotLevel } from "@/components/HotspotMap";
+import { hotspotLevel } from "@/lib/hotspotUtils";
 
 const HotspotMap = lazy(() => import("@/components/HotspotMap"));
 
