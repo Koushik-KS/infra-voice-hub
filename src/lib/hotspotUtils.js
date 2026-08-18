@@ -1,4 +1,4 @@
-import { DISTRICT_COORDS } from "@/lib/demoData";
+import { coordsForDistrict } from "@/lib/geo";
 
 export function hotspotLevel(h) {
   const critical = h.criticalCount ?? 0;
@@ -11,8 +11,10 @@ export function hotspotLevel(h) {
 }
 
 export function hotspotCoords(h) {
-  if (typeof h.lat === "number" && typeof h.lng === "number") return [h.lat, h.lng];
-  return DISTRICT_COORDS[h.district] ?? null;
+  const lat = h.lat ?? h.latitude ?? h.location?.latitude;
+  const lng = h.lng ?? h.longitude ?? h.location?.longitude;
+  if (typeof lat === "number" && typeof lng === "number") return [lat, lng];
+  return coordsForDistrict(h.district);
 }
 
 export const HOTSPOT_LEVEL_COLOR = {
