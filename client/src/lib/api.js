@@ -67,13 +67,9 @@ export async function getHotspots({ country } = {}) {
 // Get project recommendations
 export async function getRecommendations() {
   try {
-    const response = await api.get(
-      "/recommendations"
-    );
+    const response = await api.get("/recommendations");
 
-    return response.data.data ||
-      response.data ||
-      [];
+    return response.data.data || response.data || [];
   } catch (error) {
     throw new Error(
       error?.response?.data?.message ||
@@ -87,9 +83,7 @@ export async function getDashboard() {
   try {
     const response = await api.get("/dashboard");
 
-    return response.data.data ||
-      response.data ||
-      {};
+    return response.data.data || response.data || {};
   } catch (error) {
     throw new Error(
       error?.response?.data?.message ||
