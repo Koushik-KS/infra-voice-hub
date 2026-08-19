@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
-  "http://localhost:5000/api";
+  "https://infra-voice-hub.onrender.com/api";
 
 export const API_ERROR_MESSAGE =
   "Unable to connect to the CivilIntel API.";
@@ -34,10 +34,7 @@ export async function getRequests({ country } = {}) {
 // Create citizen request
 export async function createRequest(payload) {
   try {
-    const response = await api.post(
-      "/requests",
-      payload
-    );
+    const response = await api.post("/requests", payload);
 
     return response.data.data;
   } catch (error) {
