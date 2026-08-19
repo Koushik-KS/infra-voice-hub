@@ -1,4 +1,4 @@
-# Infra Voice Hub
+# CivicVoice
 
 A web application designed to provide an interactive platform for infrastructure-related voice and information services.
 
