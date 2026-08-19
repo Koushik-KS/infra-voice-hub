@@ -14,6 +14,7 @@ import { Route as HotspotsRouteImport } from './routes/hotspots'
 import { Route as RecommendationsRouteImport } from './routes/recommendations'
 import { Route as RegionalRouteImport } from './routes/regional'
 import { Route as RequestsRouteImport } from './routes/requests'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SubmitRouteImport } from './routes/submit'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +42,11 @@ const RequestsRoute = RequestsRouteImport.update({
   path: '/requests',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SubmitRoute = SubmitRouteImport.update({
   id: '/submit',
   path: '/submit',
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/recommendations': typeof RecommendationsRoute
   '/regional': typeof RegionalRoute
   '/requests': typeof RequestsRoute
+  '/settings': typeof SettingsRoute
   '/submit': typeof SubmitRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/recommendations': typeof RecommendationsRoute
   '/regional': typeof RegionalRoute
   '/requests': typeof RequestsRoute
+  '/settings': typeof SettingsRoute
   '/submit': typeof SubmitRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/recommendations': typeof RecommendationsRoute
   '/regional': typeof RegionalRoute
   '/requests': typeof RequestsRoute
+  '/settings': typeof SettingsRoute
   '/submit': typeof SubmitRoute
 }
 export interface FileRouteTypes {
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/recommendations'
     | '/regional'
     | '/requests'
+    | '/settings'
     | '/submit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/recommendations'
     | '/regional'
     | '/requests'
+    | '/settings'
     | '/submit'
   id:
     | '__root__'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/recommendations'
     | '/regional'
     | '/requests'
+    | '/settings'
     | '/submit'
   fileRoutesById: FileRoutesById
 }
@@ -105,6 +117,7 @@ export interface RootRouteChildren {
   RecommendationsRoute: typeof RecommendationsRoute
   RegionalRoute: typeof RegionalRoute
   RequestsRoute: typeof RequestsRoute
+  SettingsRoute: typeof SettingsRoute
   SubmitRoute: typeof SubmitRoute
 }
 
@@ -145,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RequestsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/submit': {
       id: '/submit'
       path: '/submit'
@@ -161,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   RecommendationsRoute: RecommendationsRoute,
   RegionalRoute: RegionalRoute,
   RequestsRoute: RequestsRoute,
+  SettingsRoute: SettingsRoute,
   SubmitRoute: SubmitRoute,
 }
 export const routeTree = rootRouteImport
