@@ -18,7 +18,7 @@ function detectCategory(text) {
     return "Water";
   }
 
-  // Roads
+  // Road
   if (
     message.includes("road") ||
     message.includes("roads") ||
@@ -28,7 +28,7 @@ function detectCategory(text) {
     message.includes("ರಸ್ತೆ") ||
     message.includes("ಗುಂಡಿ")
   ) {
-    return "Roads";
+    return "Road";
   }
 
   // Healthcare
@@ -38,6 +38,9 @@ function detectCategory(text) {
     message.includes("health") ||
     message.includes("medical") ||
     message.includes("clinic") ||
+    message.includes("ambulance") ||
+    message.includes("patient") ||
+    message.includes("medicine") ||
     message.includes("ಆಸ್ಪತ್ರೆ") ||
     message.includes("ಆರೋಗ್ಯ")
   ) {
@@ -50,6 +53,8 @@ function detectCategory(text) {
     message.includes("college") ||
     message.includes("teacher") ||
     message.includes("education") ||
+    message.includes("classroom") ||
+    message.includes("student") ||
     message.includes("ಶಾಲೆ") ||
     message.includes("ಕಾಲೇಜು")
   ) {
@@ -62,6 +67,8 @@ function detectCategory(text) {
     message.includes("power") ||
     message.includes("current") ||
     message.includes("electric") ||
+    message.includes("power cut") ||
+    message.includes("transformer") ||
     message.includes("ವಿದ್ಯುತ್") ||
     message.includes("ಕರೆಂಟ್")
   ) {
@@ -75,6 +82,8 @@ function detectCategory(text) {
     message.includes("sanitation") ||
     message.includes("waste") ||
     message.includes("sewage") ||
+    message.includes("dirty") ||
+    message.includes("drain") ||
     message.includes("ಕಸ") ||
     message.includes("ಚರಂಡಿ")
   ) {
@@ -84,10 +93,13 @@ function detectCategory(text) {
   // Agriculture
   if (
     message.includes("farmer") ||
+    message.includes("farmers") ||
     message.includes("crop") ||
     message.includes("agriculture") ||
     message.includes("irrigation") ||
     message.includes("farming") ||
+    message.includes("rainfall") ||
+    message.includes("fertilizer") ||
     message.includes("ರೈತ") ||
     message.includes("ಕೃಷಿ") ||
     message.includes("ಬೆಳೆ")
@@ -104,6 +116,7 @@ function detectCategory(text) {
 function detectPriority(text) {
   const message = text.toLowerCase();
 
+  // Critical
   if (
     message.includes("emergency") ||
     message.includes("danger") ||
@@ -111,6 +124,11 @@ function detectPriority(text) {
     message.includes("urgent") ||
     message.includes("critical") ||
     message.includes("emergency situation") ||
+    message.includes("life threatening") ||
+    message.includes("accident") ||
+    message.includes("collapse") ||
+    message.includes("flood") ||
+    message.includes("fire") ||
     message.includes("ತುರ್ತು") ||
     message.includes("ಅಪಾಯ") ||
     message.includes("ಸಾವು")
@@ -118,25 +136,33 @@ function detectPriority(text) {
     return "Critical";
   }
 
+  // High
   if (
     message.includes("serious") ||
     message.includes("immediately") ||
     message.includes("major") ||
     message.includes("severe") ||
     message.includes("quickly") ||
+    message.includes("as soon as possible") ||
+    message.includes("important") ||
     message.includes("ಗಂಭೀರ") ||
     message.includes("ತಕ್ಷಣ")
   ) {
     return "High";
   }
 
+  // Low
   if (
     message.includes("small") ||
-    message.includes("minor")
+    message.includes("minor") ||
+    message.includes("little") ||
+    message.includes("not urgent") ||
+    message.includes("ಸಣ್ಣ")
   ) {
     return "Low";
   }
 
+  // Default
   return "Medium";
 }
 
@@ -154,6 +180,7 @@ const createRequest = async (req, res) => {
       source,
     } = req.body;
 
+    // Validate request text
     if (!requestText?.trim()) {
       return res.status(400).json({
         success: false,
@@ -161,34 +188,42 @@ const createRequest = async (req, res) => {
       });
     }
 
-    if (!state) {
+    // Validate state
+    if (!state?.trim()) {
       return res.status(400).json({
         success: false,
         message: "State is required",
       });
     }
 
-    if (!district) {
+    // Validate district
+    if (!district?.trim()) {
       return res.status(400).json({
         success: false,
         message: "District is required",
       });
     }
 
+    // AI category and priority detection
     const category = detectCategory(requestText);
     const priority = detectPriority(requestText);
 
-    // Convert frontend values to backend schema values
+    // Normalize source for MongoDB schema
     let normalizedSource = "Web";
 
     if (source === "Voice") {
       normalizedSource = "Voice";
-    }
-
-    if (source === "Messaging") {
+    } else if (source === "Messaging") {
+      normalizedSource = "Messaging";
+    } else if (source === "Mobile") {
+      normalizedSource = "Mobile";
+    } else if (source === "WhatsApp") {
       normalizedSource = "WhatsApp";
+    } else if (source === "Text") {
+      normalizedSource = "Text";
     }
 
+    // Create request
     const request = await Request.create({
       citizenName:
         citizenName?.trim() || "Anonymous Citizen",
@@ -199,18 +234,20 @@ const createRequest = async (req, res) => {
 
       priority,
 
-      country: country || "India",
+      country:
+        country?.trim() || "India",
 
-      state,
+      state: state.trim(),
 
-      district,
+      district: district.trim(),
 
       source: normalizedSource,
 
       aiAnalysis:
         `CivilIntel Analysis: ` +
         `Detected category: ${category}. ` +
-        `Priority level: ${priority}.`,
+        `Priority level: ${priority}. ` +
+        `Source: ${normalizedSource}.`,
     });
 
     return res.status(201).json({
@@ -219,14 +256,13 @@ const createRequest = async (req, res) => {
       data: request,
     });
   } catch (error) {
-    console.error(
-      "Create Request Error:",
-      error
-    );
+    console.error("Create Request Error:", error);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to create citizen request",
+      message:
+        error.message ||
+        "Failed to create citizen request",
     });
   }
 };
@@ -244,18 +280,16 @@ const getRequests = async (req, res) => {
       filter.country = country;
     }
 
-    const requests = await Request.find(filter)
-      .sort({ createdAt: -1 });
+    const requests = await Request.find(filter).sort({
+      createdAt: -1,
+    });
 
     return res.status(200).json({
       success: true,
       data: requests,
     });
   } catch (error) {
-    console.error(
-      "Get Requests Error:",
-      error
-    );
+    console.error("Get Requests Error:", error);
 
     return res.status(500).json({
       success: false,
@@ -325,6 +359,36 @@ const getHotspots = async (req, res) => {
             },
           },
 
+          mediumCount: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: [
+                    "$priority",
+                    "Medium",
+                  ],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+
+          lowCount: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: [
+                    "$priority",
+                    "Low",
+                  ],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+
           latestRequest: {
             $max: "$createdAt",
           },
@@ -349,6 +413,10 @@ const getHotspots = async (req, res) => {
 
           highCount: 1,
 
+          mediumCount: 1,
+
+          lowCount: 1,
+
           latestRequest: 1,
         },
       },
@@ -357,6 +425,7 @@ const getHotspots = async (req, res) => {
         $sort: {
           criticalCount: -1,
           highCount: -1,
+          mediumCount: -1,
           requestCount: -1,
           latestRequest: -1,
         },
@@ -368,10 +437,7 @@ const getHotspots = async (req, res) => {
       data: hotspots,
     });
   } catch (error) {
-    console.error(
-      "Get Hotspots Error:",
-      error
-    );
+    console.error("Get Hotspots Error:", error);
 
     return res.status(500).json({
       success: false,
