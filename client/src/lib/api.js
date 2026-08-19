@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
   "http://localhost:5000/api";
 
 export const API_ERROR_MESSAGE =
@@ -63,6 +64,7 @@ export async function getHotspots({ country } = {}) {
   }
 }
 
+// Get project recommendations
 export async function getRecommendations() {
   try {
     const response = await api.get(
@@ -80,6 +82,7 @@ export async function getRecommendations() {
   }
 }
 
+// Get dashboard
 export async function getDashboard() {
   try {
     const response = await api.get("/dashboard");
